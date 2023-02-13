@@ -157,6 +157,7 @@ module ActiveRecord
 
       # Will the next call to +save+ have any changes to persist?
       def has_changes_to_save?
+        # debugger
         mutations_from_database.any_changes?
       end
 
@@ -221,7 +222,7 @@ module ActiveRecord
         end
 
         def _update_record(attribute_names = attribute_names_for_partial_updates)
-          affected_rows = super
+          affected_rows = super # before_update activerecord/lib/active_record/persistence.rb:1201 _update_record(attribute_names = self.attribute_names)
           changes_applied
           affected_rows
         end

@@ -115,6 +115,10 @@ module ActiveRecord
     end
 
     def _update_record
+      # The change is evaluated in ActiveRecord#_update_record and a decision is made whether to touch the `updated_at` timestammp.
+      # ActiveRecord#_update_record is invoked for the before_update callback during the :validate callbacks and before the change has been made.
+      # ActiveRecord#_update_record is invoked for the before_save change is evaluated during the :save callback and after the change has been made.
+      puts "call _update_record, evaluates @_touch_record && should_record_timestamps? = #{@_touch_record && should_record_timestamps?}"
       if @_touch_record && should_record_timestamps?
         current_time = current_time_from_proper_timezone
 
@@ -128,11 +132,14 @@ module ActiveRecord
     end
 
     def create_or_update(touch: true, **)
+      puts "call create_or_update, touch = #{touch}"
       @_touch_record = touch
       super
     end
 
     def should_record_timestamps?
+      puts " ===== record_timestamps = #{record_timestamps}, partial_updates? = #{partial_updates?}, has_changes_to_save? = #{has_changes_to_save?}"
+      puts " ===== should_record_timestamps? = #{record_timestamps && (!partial_updates? || has_changes_to_save?)}"
       record_timestamps && (!partial_updates? || has_changes_to_save?)
     end
 

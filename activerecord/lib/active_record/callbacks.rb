@@ -452,7 +452,8 @@ module ActiveRecord
 
   private
     def create_or_update(**)
-      _run_save_callbacks { super }
+      puts "call create_or_update(**), _run_save_callbacks"
+      _run_save_callbacks { super } # calls create_or_update(**, &block), activerecord/lib/active_record/persistence.rb:1192
     end
 
     def _create_record
@@ -460,7 +461,8 @@ module ActiveRecord
     end
 
     def _update_record
-      _run_update_callbacks { super }
+      puts "call _update_record, _run_update_callbacks"
+      _run_update_callbacks { super } # calls attribute_names_for_partial_updates, activerecord/lib/active_record/attribute_methods/dirty.rb:236
     end
   end
 end

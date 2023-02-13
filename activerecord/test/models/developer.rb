@@ -147,6 +147,24 @@ class DeveloperWithBeforeDestroyRaise < ActiveRecord::Base
   end
 end
 
+class DeveloperWithBeforeUpdateMutation < ActiveRecord::Base
+  self.table_name = "developers"
+  before_update :change_name
+  private
+    def change_name
+      self.name = "Jack Bauer"
+    end
+end
+
+class DeveloperWithBeforeSaveMutation < ActiveRecord::Base
+  self.table_name = "developers"
+  before_save :change_name
+  private
+    def change_name
+      self.name = "Jack Bauer"
+    end
+end
+
 class DeveloperWithSelect < ActiveRecord::Base
   self.table_name = "developers"
   default_scope { select("name") }

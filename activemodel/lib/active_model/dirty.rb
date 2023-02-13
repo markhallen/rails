@@ -258,9 +258,12 @@ module ActiveModel
       end
 
       def mutations_from_database
+        p "mutations_from_database"
         @mutations_from_database ||= if defined?(@attributes)
+          p "ActiveModel::AttributeMutationTracker.new(@attributes)"
           ActiveModel::AttributeMutationTracker.new(@attributes)
         else
+          p "ActiveModel::ForcedMutationTracker.new(self)"
           ActiveModel::ForcedMutationTracker.new(self)
         end
       end

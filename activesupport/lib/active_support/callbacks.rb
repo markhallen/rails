@@ -99,16 +99,27 @@ module ActiveSupport
         yield if block_given?
       else
         env = Filters::Environment.new(self, false, nil)
+        puts "env: #{env}"
 
         next_sequence = callbacks.compile(type)
 
         # Common case: no 'around' callbacks defined
         if next_sequence.final?
+          puts " ******* Entered the final sequence!"
+          puts " *******  :There are no around callbacks!, this is a kind of #{kind}"
           next_sequence.invoke_before(env)
+          puts "UpdatyPost.last.name: #{UpdatyPost.last.name}" if kind == :update
+          puts "SavyPost.last.name: #{SavyPost.last&.name}" if kind == :save
+          puts " ******* START yield" if [:update, :save].include?(kind)
+          # debugger if (kind == :save && SavyPost.count.positive?) || (kind == :update && UpdatyPost.count.positive?)
           env.value = !env.halted && (!block_given? || yield)
+          puts " ******* END yield" if [:update, :save].include?(kind)
+          puts "UpdatyPost.last.name: #{UpdatyPost.last.name}" if kind == :update
+          puts "SavyPost.last.name: #{SavyPost.last&.name}" if kind == :save
           next_sequence.invoke_after(env)
           env.value
         else
+          puts " *******  :There are around callbacks!, this is a kind of #{kind}"
           invoke_sequence = Proc.new do
             skipped = nil
 
@@ -593,6 +604,8 @@ module ActiveSupport
         end
 
         def invoke_before(arg)
+          puts "call invoke_before(arg), arg = #{arg}"
+          # debugger
           @before.each { |b| b.call(arg) }
         end
 

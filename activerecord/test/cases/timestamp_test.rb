@@ -27,6 +27,24 @@ class TimestampTest < ActiveRecord::TestCase
     assert_not_equal @previously_updated_at, @developer.updated_at
   end
 
+  def test_saving_an_unchanged_record_with_a_changing_before_update_callback_updates_its_timestamp
+    @developer = DeveloperWithBeforeUpdateMutation.create!
+    @previously_updated_at = @developer.updated_at
+
+    @developer.save!
+
+    assert_not_equal @previously_updated_at, @developer.updated_at
+  end
+
+  def test_saving_an_unchanged_record_with_a_changing_before_save_callback_updates_its_timestamp
+    @developer = DeveloperWithBeforeSaveMutation.create!
+    @previously_updated_at = @developer.updated_at
+
+    @developer.save!
+
+    assert_not_equal @previously_updated_at, @developer.updated_at
+  end
+
   def test_saving_a_unchanged_record_doesnt_update_its_timestamp
     @developer.save!
 

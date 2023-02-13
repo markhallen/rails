@@ -43,6 +43,7 @@ module ActiveModel
 
     def changed?(attr_name, from: OPTION_NOT_GIVEN, to: OPTION_NOT_GIVEN)
       attribute_changed?(attr_name) &&
+        (p "attr_name = #{attr_name}, from = #{from}, to = #{to}, original_value = #{original_value(attr_name)}, type_cast = #{type_cast(attr_name, from)}, fetch_value = #{fetch_value(attr_name)}, type_cast = #{type_cast(attr_name, to)}" || true) &&
         (OPTION_NOT_GIVEN == from || original_value(attr_name) == type_cast(attr_name, from)) &&
         (OPTION_NOT_GIVEN == to || fetch_value(attr_name) == type_cast(attr_name, to))
     end
